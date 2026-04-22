@@ -1,75 +1,140 @@
-import { Mic, Users, Trophy, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { 
+  BookOpen, Mic, Users, Trophy, Sparkles, 
+  ChevronRight, Clock, Users as UsersIcon, Calendar, Phone,
+  CheckCircle2, ArrowRight, Star
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
-const programs = [
-  {
-    icon: Mic,
-    title: "Storytelling & Narration",
-    desc: "Build vocabulary, expression, and creative confidence",
-    tags: ["Ages 5–9", "Beginner"],
-  },
-  {
-    icon: Users,
-    title: "Debates & Discussions",
-    desc: "Develop critical thinking and persuasive speaking skills",
-    tags: ["Ages 10–15", "Intermediate"],
-  },
-  {
-    icon: Trophy,
-    title: "MUN & Competition Prep",
-    desc: "Intensive training for Model UN, elocution, and oratory contests",
-    tags: ["Ages 10–15", "Advanced"],
-  },
-  {
-    icon: Sparkles,
-    title: "Creative Expression",
-    desc: "Poetry recitation, role-play, and dramatic performances",
-    tags: ["All Ages", "Fun"],
-  },
-];
+const iconMap: any = {
+  Mic: Mic,
+  Users: Users,
+  Trophy: Trophy,
+  Sparkles: Sparkles,
+  Book: BookOpen
+};
 
-const Programs = () => (
-  <section id="programs" className="py-16 bg-background">
-    <div className="container mx-auto px-4">
-      <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-center mb-2">
-        Which Program Is Right for <span className="text-yellow-400">Your Child?</span>
-      </h2>
-      <p className="font-body text-muted-foreground text-center max-w-xl mx-auto mb-12">
-        Browse by category or talk to our program advisors
-      </p>
+const Programs = () => {
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {programs.map((p) => (
-          <a href="#demo" key={p.title} className="group bg-card rounded-2xl overflow-hidden border border-border shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all">
-            <div className="h-36 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <p.icon className="text-primary" size={32} />
-              </div>
-            </div>
-            <div className="p-5">
-              <h3 className="font-display font-bold text-base mb-1">{p.title}</h3>
-              <p className="font-body text-sm text-muted-foreground mb-3 leading-relaxed">{p.desc}</p>
-              <div className="flex gap-2 flex-wrap">
-                {p.tags.map(t => (
-                  <span key={t} className="text-xs font-body font-semibold bg-muted text-muted-foreground px-2.5 py-1 rounded-full">{t}</span>
-                ))}
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/programs");
+        setPrograms(response.data);
+      } catch (error) { console.error("Error fetching programs", error); }
+      finally { setLoading(false); }
+    };
+    fetchPrograms();
+  }, []);
 
-      <div className="mt-10 bg-muted rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-2xl mx-auto">
-        <div>
-          <h4 className="font-display font-bold text-base">Not sure which program?</h4>
-          <p className="font-body text-sm text-muted-foreground">Our advisors can guide you — free consultation</p>
+  return (
+    <section id="programs" className="py-24 bg-[#f8fafc] overflow-hidden relative">
+      {/* Decorative BG */}
+      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-background to-transparent" />
+      
+      <div className="container mx-auto px-4 relative">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2 rounded-full font-bold text-xs mb-6 tracking-widest uppercase">
+            <Star size={14} className="fill-current" /> Premium Learning Paths
+          </div>
+          <h2 className="font-display text-4xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
+            Our Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Course Packages</span>
+          </h2>
+          <p className="font-body text-lg text-muted-foreground leading-relaxed">
+            Choose a specialized package designed by global educators to fast-track your child's growth.
+          </p>
         </div>
-        <div className="flex gap-3">
-          <a href="tel:+919876543210" className="px-5 py-2 rounded-full bg-cta-gradient font-display font-bold text-primary-foreground text-sm">Call Us</a>
-          <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="px-5 py-2 rounded-full border-2 border-primary font-display font-bold text-primary text-sm">WhatsApp</a>
+
+        {/* Scrollable Container */}
+        <div className="relative group">
+          <div className="flex gap-8 overflow-x-auto pb-12 pt-4 px-2 no-scrollbar snap-x snap-mandatory scroll-smooth">
+            {loading ? (
+               [1, 2, 3].map(i => <div key={i} className="min-w-[350px] lg:min-w-[calc(33.33%-22px)] h-[550px] bg-card animate-pulse rounded-[2.5rem]" />)
+            ) : programs.length === 0 ? (
+              <p className="col-span-full text-center text-muted-foreground py-20 font-display text-xl italic w-full">Curating new packages. Check back soon!</p>
+            ) : programs.map((p: any) => {
+              const Icon = iconMap[p.icon_name] || BookOpen;
+              return (
+                <div key={p.id} className="min-w-[320px] md:min-w-[380px] lg:min-w-[calc(33.33%-22px)] snap-center">
+                  <div className="group bg-white rounded-[2.5rem] border border-border shadow-card hover:shadow-[0_40px_80px_-24px_rgba(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-500 flex flex-col relative overflow-hidden h-full">
+                    {/* Popular Ribbon */}
+                    <div className="absolute top-5 right-[-35px] bg-orange-500 text-white text-[10px] font-bold py-1 px-10 rotate-45 z-20 shadow-md">
+                      POPULAR
+                    </div>
+
+                    {/* Package Preview Image */}
+                    <div className="aspect-[16/10] relative overflow-hidden">
+                      <img 
+                        src={p.image_url || "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800"} 
+                        alt={p.title} 
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute bottom-6 left-6 text-white">
+                        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
+                           <Icon size={14} /> {p.level || 'Foundational'}
+                        </div>
+                        <h3 className="font-display font-bold text-2xl">{p.title}</h3>
+                      </div>
+                    </div>
+
+                    {/* Package Details */}
+                    <div className="p-8 flex-1 flex flex-col">
+                      <div className="flex items-baseline gap-2 mb-6">
+                        <span className="text-4xl font-display font-extrabold text-primary">₹{p.price || '0'}</span>
+                        <span className="text-sm text-muted-foreground font-medium">/ full course</span>
+                      </div>
+
+                      <div className="space-y-4 mb-8">
+                         <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">
+                            <CheckCircle2 size={18} className="text-green-500" /> {p.duration || '6 Months Duration'}
+                         </div>
+                         <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">
+                            <CheckCircle2 size={18} className="text-green-500" /> {p.batch_size || 'Max 12 Students/Batch'}
+                         </div>
+                         <div className="flex items-center gap-3 text-sm font-medium text-foreground/80">
+                            <CheckCircle2 size={18} className="text-green-500" /> {p.timing || 'Flexible Evening Batches'}
+                         </div>
+                      </div>
+
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-8">
+                        {p.description}
+                      </p>
+
+                      <div className="mt-auto flex flex-col gap-3">
+                        <Link to={`/program/${p.slug}`} className="w-full">
+                           <Button variant="outline" className="w-full h-12 rounded-xl font-bold border-2 hover:bg-primary/5">
+                             View Curriculum
+                           </Button>
+                        </Link>
+                        <a href="#demo" className="w-full">
+                           <Button className="w-full h-12 rounded-xl font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
+                             Enroll Now <ArrowRight size={18} className="ml-2" />
+                           </Button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          
+          {/* Subtle scroll indicator for desktop */}
+          <div className="hidden lg:flex justify-center gap-2 mt-4">
+             <div className="w-8 h-1 bg-primary rounded-full" />
+             <div className="w-2 h-1 bg-border rounded-full" />
+             <div className="w-2 h-1 bg-border rounded-full" />
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default Programs;
