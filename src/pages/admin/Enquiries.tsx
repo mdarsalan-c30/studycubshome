@@ -21,9 +21,14 @@ const EnquiryManager = () => {
   const fetchEnquiries = async () => {
     try {
       const response = await axios.get(`${API_URL}/api/enquiries`);
-      setEnquiries(response.data);
-    } catch (error) { console.error("Error fetching enquiries", error); }
-    finally { setLoading(false); }
+      console.log("Enquiries API Response:", response.data);
+      setEnquiries(Array.isArray(response.data) ? response.data : []);
+    } catch (error) { 
+      console.error("Error fetching enquiries", error);
+      setEnquiries([]);
+    } finally { 
+      setLoading(false); 
+    }
   };
 
   useEffect(() => { fetchEnquiries(); }, []);
