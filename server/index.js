@@ -53,7 +53,13 @@ pool.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`, (err) => {
     // Now switch to using the database
     pool.query(`USE ${process.env.DB_NAME}`, (err) => {
         if (err) console.error('Error switching to database:', err);
-        else console.log(`Using database: ${process.env.DB_NAME}`);
+        else {
+            console.log(`Using database: ${process.env.DB_NAME}`);
+            // Ensure updated_by column exists
+            pool.query("ALTER TABLE enquiries ADD COLUMN IF NOT EXISTS updated_by INT", (err) => {
+                if (err) console.log("Note: updated_by column might already exist or MariaDB version is older.");
+            });
+        }
     });
 });
 

@@ -26,7 +26,7 @@ const UserManager = () => {
   const handleCreate = async () => {
     if (!newUser.username || !newUser.password) return toast.error("Fill all fields");
     try {
-      await axios.post("http://localhost:5000/api/users", newUser);
+      await axios.post(`${API_URL}/api/users`, newUser);
       toast.success("Staff account created!");
       setIsAdding(false);
       setNewUser({ username: "", password: "", full_name: "", role: "writer" });
