@@ -56,7 +56,7 @@ const DashboardOverview = () => {
         <p className="font-body text-muted-foreground mt-1">Welcome back to StudyCubs admin panel.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((card) => (
+        {(Array.isArray(statCards) ? statCards : []).map((card) => (
           <div key={card.label} className="bg-card p-6 rounded-2xl border border-border shadow-card hover:shadow-card-hover transition-all">
             <div className={`w-12 h-12 ${card.color} rounded-xl flex items-center justify-center mb-4 text-white shadow-lg`}><card.icon size={24} /></div>
             <p className="text-sm font-body text-muted-foreground font-semibold">{card.label}</p>

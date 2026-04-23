@@ -51,7 +51,7 @@ const PublicBlogs = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog: any) => (
+            {(Array.isArray(blogs) ? blogs : []).map((blog: any) => (
               <AnimatedSection key={blog.id}>
                 <Link to={`/blog/${blog.slug}`} className="group block">
                   <Card className="rounded-3xl overflow-hidden border-border shadow-card hover:shadow-card-hover transition-all h-full flex flex-col">

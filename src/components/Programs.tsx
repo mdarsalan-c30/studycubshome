@@ -55,9 +55,9 @@ const Programs = () => {
           <div className="flex gap-8 overflow-x-auto pb-12 pt-4 px-2 no-scrollbar snap-x snap-mandatory scroll-smooth">
             {loading ? (
                [1, 2, 3].map(i => <div key={i} className="min-w-[350px] lg:min-w-[calc(33.33%-22px)] h-[550px] bg-card animate-pulse rounded-[2.5rem]" />)
-            ) : programs.length === 0 ? (
+            ) : (Array.isArray(programs) ? programs : []).length === 0 ? (
               <p className="col-span-full text-center text-muted-foreground py-20 font-display text-xl italic w-full">Curating new packages. Check back soon!</p>
-            ) : programs.map((p: any) => {
+            ) : (Array.isArray(programs) ? programs : []).map((p: any) => {
               const Icon = iconMap[p.icon_name] || BookOpen;
               return (
                 <div key={p.id} className="min-w-[320px] md:min-w-[380px] lg:min-w-[calc(33.33%-22px)] snap-center">
