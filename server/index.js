@@ -160,6 +160,8 @@ app.get('/api/users', (req, res) => {
 // --- ENQUIRY ROUTES ---
 app.post('/api/enquiries', (req, res) => {
     const { parent_name, phone_number, child_age, city, message } = req.body;
+    console.log(`\n--- NEW ENQUIRY RECEIVED ---`);
+    console.log(`From: ${parent_name}, Phone: ${phone_number}, City: ${city}`);
     const query = 'INSERT INTO enquiries (parent_name, phone_number, child_age, city, message) VALUES (?, ?, ?, ?, ?)';
     db.query(query, [parent_name, phone_number, child_age, city, message], (err, result) => {
         if (err) {
