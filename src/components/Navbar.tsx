@@ -66,9 +66,9 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <a href="tel:+919876543210" className="hidden md:inline-flex items-center gap-2 font-display font-bold text-primary text-sm hover:underline">
+        <a href="tel:+918147434014" className="hidden md:inline-flex items-center gap-2 font-display font-bold text-primary text-sm hover:underline">
           <Phone size={16} />
-          9876 54 32 10
+          8147434014
         </a>
 
         <button className="md:hidden text-foreground" onClick={() => setOpen(!open)} aria-label="Toggle menu">
