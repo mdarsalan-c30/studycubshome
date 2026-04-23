@@ -23,7 +23,10 @@ const AdminLogin = () => {
       localStorage.setItem("adminToken", response.data.token);
       localStorage.setItem("adminUser", JSON.stringify(response.data.user));
       toast.success("Login successful!");
-      navigate("/admin/dashboard");
+      // Hard redirect to ensure clean state
+      setTimeout(() => {
+        window.location.href = "/admin/dashboard";
+      }, 500);
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {

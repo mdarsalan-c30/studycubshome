@@ -24,6 +24,7 @@ const queryClient = new QueryClient();
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("adminToken");
+  console.log("Protected Route Token Check:", !!token);
   
   if (!token || token === "undefined") {
     return <Navigate to="/admin" replace />;
