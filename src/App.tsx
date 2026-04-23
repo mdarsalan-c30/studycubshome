@@ -14,7 +14,10 @@ import EnquiryManager from "./pages/admin/Enquiries.tsx";
 import BlogManager from "./pages/admin/Blogs.tsx";
 import UserManager from "./pages/admin/Users.tsx";
 import ProgramManager from "./pages/admin/Programs.tsx";
+import MaterialManager from "./pages/admin/Materials.tsx";
 import PublicBlogs from "./pages/Blogs.tsx";
+import Resources from "./pages/Resources.tsx";
+import ResourceDetail from "./pages/ResourceDetail.tsx";
 import BlogDetail from "./pages/BlogDetail.tsx";
 import ProgramDetail from "./pages/ProgramDetail.tsx";
 
@@ -42,6 +45,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/blogs" element={<PublicBlogs />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/:id" element={<ResourceDetail />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/program/:slug" element={<ProgramDetail />} />
           <Route path="/admin" element={<AdminLogin />} />
@@ -49,6 +54,7 @@ const App = () => (
             <Route path="dashboard" element={<DashboardOverview />} />
             <Route path="enquiries" element={<EnquiryManager />} />
             <Route path="programs" element={<ProgramManager />} />
+            <Route path="materials" element={<MaterialManager />} />
             <Route path="blogs" element={<BlogManager />} />
             <Route path="users" element={<UserManager />} />
           </Route>

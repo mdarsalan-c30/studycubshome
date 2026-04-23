@@ -26,6 +26,7 @@ const AdminLayout = () => {
     { label: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard", roles: ["admin", "writer", "sales"] },
     { label: "Enquiries", icon: MessageSquare, path: "/admin/enquiries", roles: ["admin", "sales"] },
     { label: "Programs", icon: BookOpen, path: "/admin/programs", roles: ["admin"] },
+    { label: "Materials", icon: Search, path: "/admin/materials", roles: ["admin"] },
     { label: "Blogs", icon: Search, path: "/admin/blogs", roles: ["admin", "writer"] },
     { label: "Users", icon: Users, path: "/admin/users", roles: ["admin"] }, // NEW: User Manager for Super Admin
   ];
