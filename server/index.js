@@ -43,42 +43,37 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Create database if not exists and then use it
-pool.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`, (err) => {
+// Database Connection Check and Migrations
+pool.getConnection((err, connection) => {
     if (err) {
-        console.error('Error creating database:', err);
+        console.error('Database connection failed:', err);
         return;
     }
-    console.log(`Database "${process.env.DB_NAME}" checked/created.`);
+    console.log(`Connected to database: ${process.env.DB_NAME}`);
     
-    // Now switch to using the database
-    pool.query(`USE ${process.env.DB_NAME}`, (err) => {
-        if (err) console.error('Error switching to database:', err);
-        else {
-            console.log(`Using database: ${process.env.DB_NAME}`);
-            // Ensure updated_by column exists
-            pool.query("ALTER TABLE enquiries ADD COLUMN IF NOT EXISTS updated_by INT", (err) => {
-                if (err) console.log("Migration check done.");
-            });
-
-            // Ensure all program columns exist
-            const programCols = [
-                "full_description TEXT", 
-                "overview_points TEXT", 
-                "duration VARCHAR(255)", 
-                "level VARCHAR(255)", 
-                "timing VARCHAR(255)", 
-                "price VARCHAR(255)", 
-                "slug VARCHAR(255) UNIQUE", 
-                "batch_size VARCHAR(255)"
-            ];
-            programCols.forEach(col => {
-                pool.query(`ALTER TABLE programs ADD COLUMN IF NOT EXISTS ${col}`, (err) => {
-                    if (err) console.log(`Check for ${col} done.`);
-                });
-            });
-        }
+    // Ensure updated_by column exists
+    connection.query("ALTER TABLE enquiries ADD COLUMN IF NOT EXISTS updated_by INT", (err) => {
+        if (err) console.log("Enquiries migration check done.");
     });
+
+    // Ensure all program columns exist
+    const programCols = [
+        "full_description TEXT", 
+        "overview_points TEXT", 
+        "duration VARCHAR(255)", 
+        "level VARCHAR(255)", 
+        "timing VARCHAR(255)", 
+        "price VARCHAR(255)", 
+        "slug VARCHAR(255) UNIQUE", 
+        "batch_size VARCHAR(255)"
+    ];
+    programCols.forEach(col => {
+        connection.query(`ALTER TABLE programs ADD COLUMN IF NOT EXISTS ${col}`, (err) => {
+            if (err) console.log(`Check for ${col} done.`);
+        });
+    });
+
+    connection.release();
 });
 
 const db = pool;
