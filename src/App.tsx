@@ -17,6 +17,9 @@ import ProgramManager from "./pages/admin/Programs.tsx";
 import PublicBlogs from "./pages/Blogs.tsx";
 import BlogDetail from "./pages/BlogDetail.tsx";
 import ProgramDetail from "./pages/ProgramDetail.tsx";
+import Resources from "./pages/Resources.tsx";
+import ResourceDetail from "./pages/ResourceDetail.tsx";
+import MaterialManager from "./pages/admin/Materials.tsx";
 
 import ScrollToTop from "./components/ScrollToTop.tsx";
 
@@ -44,12 +47,15 @@ const App = () => (
           <Route path="/blogs" element={<PublicBlogs />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/program/:slug" element={<ProgramDetail />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/resource/:slug" element={<ResourceDetail />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/*" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>}>
             <Route path="dashboard" element={<DashboardOverview />} />
             <Route path="enquiries" element={<EnquiryManager />} />
             <Route path="programs" element={<ProgramManager />} />
             <Route path="blogs" element={<BlogManager />} />
+            <Route path="materials" element={<MaterialManager />} />
             <Route path="users" element={<UserManager />} />
           </Route>
           <Route path="*" element={<NotFound />} />

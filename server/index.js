@@ -20,8 +20,9 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'studycubs_blogs',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
+        folder: 'studycubs_assets',
+        resource_type: 'auto', // Support for PDF, PPT, etc.
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'pdf', 'pptx', 'ppt', 'docx', 'doc']
     },
 });
 
@@ -57,7 +58,51 @@ pool.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`, (err) => {
             console.log(`Using database: ${process.env.DB_NAME}`);
             // Ensure updated_by column exists
             pool.query("ALTER TABLE enquiries ADD COLUMN IF NOT EXISTS updated_by INT", (err) => {
-                if (err) console.log("Note: updated_by column might already exist or MariaDB version is older.");
+                if (err) console.log("Migration check done.");
+            });
+
+            // Ensure all program columns exist
+            const programCols = [
+                "full_description TEXT", 
+                "overview_points TEXT", 
+                "duration VARCHAR(255)", 
+                "level VARCHAR(255)", 
+                "timing VARCHAR(255)", 
+                "price VARCHAR(255)", 
+                "slug VARCHAR(255) UNIQUE", 
+                "batch_size VARCHAR(255)"
+            ];
+            programCols.forEach(col => {
+                pool.query(`ALTER TABLE programs ADD COLUMN IF NOT EXISTS ${col}`, (err) => {
+                    if (err) console.log(`Check for ${col} done.`);
+                });
+            });
+
+            // Ensure study_materials table exists
+            const createMaterialsTable = `
+                CREATE TABLE IF NOT EXISTS study_materials (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    title VARCHAR(255) NOT NULL,
+                    slug VARCHAR(255) NOT NULL UNIQUE,
+                    description TEXT,
+                    content_type ENUM('pdf', 'ppt', 'video', 'notes') DEFAULT 'pdf',
+                    file_url VARCHAR(555) NOT NULL,
+                    thumbnail_url VARCHAR(555),
+                    category VARCHAR(100),
+                    author_id INT,
+                    status ENUM('draft', 'published') DEFAULT 'draft',
+                    view_count INT DEFAULT 0,
+                    download_count INT DEFAULT 0,
+                    seo_title VARCHAR(255),
+                    seo_description TEXT,
+                    seo_keywords TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
+                )`;
+            pool.query(createMaterialsTable, (err) => {
+                if (err) console.error('Error creating study_materials table:', err);
+                else console.log('Study Materials table checked/created.');
             });
         }
     });
@@ -284,6 +329,73 @@ app.post('/api/blogs', (req, res) => {
 app.post('/api/upload', upload.single('image'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
     res.json({ url: req.file.path });
+});
+
+// Specific upload for materials (supporting PDF/PPT)
+app.post('/api/upload-material', upload.single('file'), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    // Cloudinary automatically optimizes images. For raw files like PDF/PPT, 
+    // it serves them from CDN which helps with load times.
+    res.json({ 
+        url: req.file.path,
+        format: req.file.format,
+        size: req.file.size
+    });
+});
+
+// --- STUDY MATERIALS ROUTES ---
+app.get('/api/public/materials', (req, res) => {
+    const query = 'SELECT m.*, u.full_name as author_name FROM study_materials m LEFT JOIN users u ON m.author_id = u.id WHERE m.status = "published" ORDER BY m.created_at DESC';
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+app.get('/api/public/materials/:slug', (req, res) => {
+    const query = 'SELECT m.*, u.full_name as author_name FROM study_materials m LEFT JOIN users u ON m.author_id = u.id WHERE m.slug = ? AND m.status = "published"';
+    db.query(query, [req.params.slug], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (results.length === 0) return res.status(404).json({ error: 'Material not found' });
+        res.json(results[0]);
+    });
+});
+
+app.get('/api/materials', (req, res) => {
+    const query = 'SELECT m.*, u.full_name as author_name FROM study_materials m LEFT JOIN users u ON m.author_id = u.id ORDER BY m.created_at DESC';
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+app.post('/api/materials', (req, res) => {
+    const { title, slug, description, content_type, file_url, thumbnail_url, category, author_id, status, seo_title, seo_description, seo_keywords } = req.body;
+    const query = `INSERT INTO study_materials 
+        (title, slug, description, content_type, file_url, thumbnail_url, category, author_id, status, seo_title, seo_description, seo_keywords) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+        title=?, description=?, content_type=?, file_url=?, thumbnail_url=?, category=?, status=?, seo_title=?, seo_description=?, seo_keywords=?`;
+    
+    const values = [
+        title, slug, description, content_type, file_url, thumbnail_url, category, author_id, status, seo_title, seo_description, seo_keywords,
+        title, description, content_type, file_url, thumbnail_url, category, status, seo_title, seo_description, seo_keywords
+    ];
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Material Save Error:', err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({ message: 'Material saved successfully', id: result.insertId });
+    });
+});
+
+app.delete('/api/materials/:id', (req, res) => {
+    db.query('DELETE FROM study_materials WHERE id=?', [req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'Material deleted' });
+    });
 });
 
 const PORT = process.env.PORT || 5000;

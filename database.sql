@@ -57,3 +57,23 @@ CREATE TABLE programs (
 
 INSERT INTO users (username, password, full_name, role) 
 VALUES ('admin', '$2b$10$pOrUvDTo29uprY0QzBHmq.QSiK/3hcyIBLSxtZSQz.bQe/fDcxASO', 'Super Admin', 'admin');
+CREATE TABLE IF NOT EXISTS study_materials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    content_type ENUM('pdf', 'ppt', 'video', 'notes') DEFAULT 'pdf',
+    file_url VARCHAR(555) NOT NULL,
+    thumbnail_url VARCHAR(555),
+    category VARCHAR(100),
+    author_id INT,
+    status ENUM('draft', 'published') DEFAULT 'draft',
+    view_count INT DEFAULT 0,
+    download_count INT DEFAULT 0,
+    seo_title VARCHAR(255),
+    seo_description TEXT,
+    seo_keywords TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
+);

@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, BookOpen, MessageSquare, LogOut, Search, Users } from "lucide-react";
+import { LayoutDashboard, BookOpen, MessageSquare, LogOut, Search, Users, FileText } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminLayout = () => {
@@ -27,6 +27,7 @@ const AdminLayout = () => {
     { label: "Enquiries", icon: MessageSquare, path: "/admin/enquiries", roles: ["admin", "sales"] },
     { label: "Programs", icon: BookOpen, path: "/admin/programs", roles: ["admin"] },
     { label: "Blogs", icon: Search, path: "/admin/blogs", roles: ["admin", "writer"] },
+    { label: "Materials", icon: FileText, path: "/admin/materials", roles: ["admin", "writer"] },
     { label: "Users", icon: Users, path: "/admin/users", roles: ["admin"] }, // NEW: User Manager for Super Admin
   ];
 
