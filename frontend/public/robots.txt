@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/blog-editor
+Disallow: /admin/program-editor
+
+Sitemap: https://www.studycubs.com/sitemap.xml
