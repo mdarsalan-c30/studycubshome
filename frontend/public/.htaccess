@@ -1,0 +1,26 @@
+# STUDYCUBS PRODUCTION HTACCESS
+# Handles React Router SPA routing and API passthrough
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # 1. Skip Rewrite for existing files and directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2. Exclude API requests from React Router (let PHP handle it)
+  RewriteRule ^api/ - [L]
+
+  # 3. Route all other requests to index.html (React Router handles them)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Performance Optimizations (Gzip)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json
+</IfModule>
+
+# Security
+Options -Indexes
