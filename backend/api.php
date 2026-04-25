@@ -209,7 +209,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($user && $password === $user['password']) {
+
+        // Check password (supports hashed and plain text fallback)
+        $isCorrect = false;
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                $isCorrect = true;
+            } elseif ($password === $user['password']) {
+                // Fallback for old plain-text passwords
+                $isCorrect = true;
+            }
+        }
+
+        if ($isCorrect) {
             if ($user['status'] !== 'active') sendError("Account disabled", 403);
             $token = base64_encode($user['email'] . ':' . $user['role']);
             echo json_encode([
@@ -217,7 +229,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "token" => $token,
                 "user" => ["id" => $user['id'], "name" => $user['name'], "email" => $user['email'], "role" => $user['role']]
             ]);
-        } else { sendError("Invalid credentials", 401); }
+        } else {
+            sendError("Invalid credentials", 401);
+        }
         exit;
     }
 

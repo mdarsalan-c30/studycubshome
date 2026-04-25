@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
+import AdsLandingPage from './pages/AdsLandingPage';
 import ProgramsPage from './pages/ProgramsPage';
 import ProgramDetailPage from './pages/ProgramDetailPage';
 import MaterialsPage from './pages/MaterialsPage';
@@ -26,6 +27,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/adslanding" element={<AdsLandingPage />} />
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/program/:slug" element={<ProgramDetailPage />} />
         <Route path="/materials" element={<MaterialsPage />} />
