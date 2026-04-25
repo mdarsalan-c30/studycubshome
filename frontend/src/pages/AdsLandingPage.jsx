@@ -240,6 +240,100 @@ const AdsLandingPage = () => {
         </section>
       </div>
 
+      {/* ABOUT SECTION */}
+      <div className="animated">
+        <section className="super">
+          <div className="container">
+            <div className="super-grid">
+              <div className="super-copy">
+                <span className="eyebrow" style={{textAlign: 'left'}}>About StudyCubs</span>
+                <h2 className="section-title" style={{textAlign: 'left', marginBottom: '1.5rem'}}>You Focus on Parenting. <span className="yellow">We'll Handle the Speaking Skills.</span></h2>
+                <p style={{marginBottom: '1.5rem', fontSize: '1.125rem'}}>StudyCubs is India's leading public speaking and communication platform for children. Our unique methodology blends storytelling, impromptu speaking, debates, and creative expression.</p>
+                <div className="points-grid">
+                  <div className="point"><b>•</b> 1,000+ Students Trained</div>
+                  <div className="point"><b>•</b> 50+ Expert Coaches</div>
+                  <div className="point"><b>•</b> 10,000+ Sessions Delivered</div>
+                  <div className="point"><b>•</b> Pan India (Online)</div>
+                  <div className="point"><b>•</b> 4.9★ Parent Rating</div>
+                  <div className="point"><b>•</b> Small Batches (Max 6)</div>
+                  <div className="point"><b>•</b> Certificate Included</div>
+                </div>
+              </div>
+              <div className="super-img">
+                <div className="img-placeholder">
+                  {/* Image: StudyCubs mascot and student */}
+                  <div className="blob blob-c"></div>
+                  <div className="visual-card">
+                    <div className="visual-top">🏆</div>
+                    <div className="visual-body">
+                      <strong>10k+ Sessions</strong>
+                      <p>Completed Successfully</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* TESTIMONIALS */}
+      <div className="animated">
+        <section className="reviews">
+          <div className="container">
+            <span className="eyebrow">Testimonials</span>
+            <h2 className="section-title">What <span className="yellow">Families Say</span> About Us</h2>
+            <p style={{textAlign: 'center', marginBottom: '3rem'}}>Don't just take our word for it — hear from parents who've seen the magic.</p>
+            <div className="testimonial-grid">
+              {[
+                { name: 'Priya Sharma', city: 'Delhi', quote: '"My daughter was extremely shy. After just 12 sessions, she won the inter-school debate competition! The transformation is unbelievable."' },
+                { name: 'Rajesh Patel', city: 'Mumbai', quote: '"The coaches are phenomenal. My son looks forward to every session. His vocabulary and confidence have grown tremendously."' },
+                { name: 'Anita Verma', city: 'Bangalore', quote: '"I tried multiple platforms before StudyCubs. The small batch size and personal attention make all the difference. Highly recommend!"' },
+                { name: 'Suresh Nair', city: 'Chennai', quote: '"Professional service. The coach arrived on time for every session and engaged my son beautifully. His storytelling has improved so much!"' }
+              ].map((t, idx) => (
+                <div key={idx} className="card testimonial">
+                  <div className="stars">★★★★★</div>
+                  <p className="quote">{t.quote}</p>
+                  <div>
+                    <div className="name">{t.name}</div>
+                    <div className="city">{t.city}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* SUPERCUBS ARCHIVE */}
+      <div className="animated">
+        <section className="archive">
+          <div className="container">
+            <span className="eyebrow">Archives</span>
+            <h2 className="section-title">Meet Our <span className="yellow">SuperCubs 🏆</span></h2>
+            <p style={{textAlign: 'center', marginBottom: '3rem'}}>Celebrating our star students who shine bright on every stage</p>
+            <div className="program-grid">
+              {[
+                { name: 'Saadgee Patodee', role: 'Public Speaking' },
+                { name: 'Hraday Waykos', role: 'Public Speaking' },
+                { name: 'Shivani Kulkarni', role: 'Public Speaking' },
+                { name: 'Swarit', role: 'Public Speaking' }
+              ].map((s, idx) => (
+                <div key={idx} className="card program-card">
+                  <div className="program-top" style={{height: '12rem'}}>
+                    <div className="program-icon" style={{fontSize: '3rem'}}>🎓</div>
+                  </div>
+                  <div className="program-body" style={{textAlign: 'center'}}>
+                    <h3>{s.name}</h3>
+                    <p className="yellow" style={{fontWeight: '700'}}>{s.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+
       {/* DEMO FORM SECTION */}
       <div className="animated">
         <section id="demo" className="demo" ref={formRef}>
