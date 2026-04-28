@@ -51,8 +51,8 @@ const BlogDetailPage = () => {
   </div>;
 
   return (
-    <div className="bg-white font-fredoka min-h-screen pt-32 pb-20">
-      <div className="max-w-4xl mx-auto px-8 lg:px-0">
+    <div className="bg-white font-fredoka min-h-screen pt-32 pb-20 overflow-x-hidden">
+      <div className="max-w-4xl mx-auto px-6 lg:px-0 w-full">
         {/* Navigation */}
         <Link to="/blog" className="inline-flex items-center gap-2 text-gray-400 font-bold hover:text-[hsl(190,70%,42%)] transition-colors mb-12 group">
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-2 transition-transform" /> Back to Journal
@@ -63,22 +63,22 @@ const BlogDetailPage = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-600 rounded-full text-xs font-black uppercase tracking-widest mb-8">
             <Sparkles className="w-4 h-4" /> Editorial
           </div>
-          <h1 className="text-4xl lg:text-6xl font-black mb-10 leading-[1.2]">{blog.title}</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-10 leading-[1.2] break-words">{blog.title}</h1>
           
           <div className="flex flex-wrap items-center justify-between gap-6 py-10 border-y border-gray-100">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-[hsl(190,70%,42%)] text-white rounded-full flex items-center justify-center font-black text-xl">S</div>
+              <div className="w-14 h-14 bg-[hsl(190,70%,42%)] text-white rounded-full flex items-center justify-center font-black text-xl shrink-0">S</div>
               <div>
                 <p className="font-black text-gray-900">StudyCubs Editor</p>
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Expert Faculty</p>
               </div>
             </div>
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-6 md:gap-10">
                <div className="text-right">
                   <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Published</p>
                   <p className="font-bold text-gray-900">{new Date(blog.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                </div>
-               <button className="p-4 bg-gray-50 text-gray-400 rounded-2xl hover:bg-[hsl(190,70%,42%)] hover:text-white transition-all">
+               <button className="p-4 bg-gray-50 text-gray-400 rounded-2xl hover:bg-[hsl(190,70%,42%)] hover:text-white transition-all shrink-0">
                   <Share2 className="w-6 h-6" />
                </button>
             </div>
@@ -86,21 +86,27 @@ const BlogDetailPage = () => {
         </header>
 
         {/* Thumbnail */}
-        <div className="mb-20 rounded-[3rem] overflow-hidden shadow-2xl shadow-gray-200">
+        <div className="mb-20 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl shadow-gray-200">
           <img src={blog.thumbnail || 'https://via.placeholder.com/1200x800'} className="w-full aspect-video object-cover" alt={blog.title} />
         </div>
 
         {/* Content */}
         <article 
-          className="prose prose-lg md:prose-xl max-w-none break-words overflow-hidden prose-p:font-medium prose-p:text-gray-600 prose-headings:font-black prose-img:rounded-3xl prose-img:max-w-full prose-img:h-auto prose-a:text-[hsl(190,70%,42%)] mb-32 [&>*]:break-words [&_pre]:overflow-x-auto"
+          className="prose prose-lg md:prose-xl max-w-none w-full mb-32
+            break-words overflow-hidden
+            prose-p:font-medium prose-p:text-gray-600 prose-headings:font-black 
+            prose-img:rounded-3xl prose-img:w-full prose-img:h-auto prose-img:object-cover
+            prose-a:text-[hsl(190,70%,42%)] prose-a:break-all
+            [&_*]:!whitespace-normal [&_pre]:!whitespace-pre-wrap [&_code]:!break-words
+            [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
 
         {/* Footer / CTA */}
-        <div className="bg-gray-50 rounded-[4rem] p-12 lg:p-24 text-center">
+        <div className="bg-gray-50 rounded-[3rem] md:rounded-[4rem] p-8 md:p-12 lg:p-24 text-center">
            <h3 className="text-3xl lg:text-4xl font-black mb-8">Liked this article?</h3>
-           <p className="text-gray-500 text-xl font-medium mb-12 max-w-xl mx-auto">Explore our programs designed to put these skills into practice for your child.</p>
-           <Link to="/programs" className="inline-flex items-center gap-3 px-12 py-6 bg-gray-900 text-white font-black text-xl rounded-2xl shadow-2xl hover:scale-105 transition-all">
+           <p className="text-gray-500 text-lg md:text-xl font-medium mb-12 max-w-xl mx-auto">Explore our programs designed to put these skills into practice for your child.</p>
+           <Link to="/programs" className="inline-flex items-center gap-3 px-8 md:px-12 py-5 md:py-6 bg-gray-900 text-white font-black text-lg md:text-xl rounded-2xl shadow-2xl hover:scale-105 transition-all">
              Browse Programs <ArrowRight className="w-6 h-6" />
            </Link>
         </div>
