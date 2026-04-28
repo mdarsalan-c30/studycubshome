@@ -92,7 +92,7 @@ const BlogDetailPage = () => {
 
         {/* Content */}
         <article 
-          className="prose prose-xl max-w-none prose-p:font-medium prose-p:text-gray-600 prose-headings:font-black prose-img:rounded-3xl prose-a:text-[hsl(190,70%,42%)] mb-32"
+          className="prose prose-lg md:prose-xl max-w-none break-words overflow-hidden prose-p:font-medium prose-p:text-gray-600 prose-headings:font-black prose-img:rounded-3xl prose-img:max-w-full prose-img:h-auto prose-a:text-[hsl(190,70%,42%)] mb-32 [&>*]:break-words [&_pre]:overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
 
